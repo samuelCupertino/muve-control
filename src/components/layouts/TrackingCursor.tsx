@@ -70,7 +70,7 @@ export const TrackingCursor: React.FC = () => {
         left={position.x ? `${position.x}px` : 'calc(50% + 13px)'}
         top={position.y ? `${position.y}px` : 'calc(50% + 150px)'}
         zIndex={1}
-        style={{ transform: 'translate(-50%, -100%)', transition: '0.5s' }}>
+        sx={{ transform: 'translate(-50%, -100%)', transition: '0.5s' }}>
         {trackingClock}
       </Box>
     </Box>

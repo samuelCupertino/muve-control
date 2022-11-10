@@ -15,10 +15,12 @@
     "@emotion/styled": "11.10.5",
     "@mui/material": "5.10.11",
     "@plasmohq/storage": "^0.12.2",
+    "@types/react-speech-recognition": "^3.9.0",
     "ml5": "^0.12.2",
     "plasmo": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-speech-recognition": "^3.10.0",
     "react-webcam": "^7.0.1"
   },
   "devDependencies": {

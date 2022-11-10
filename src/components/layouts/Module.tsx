@@ -1,12 +1,15 @@
 import { Box, BoxProps, Zoom } from '@mui/material'
 import { keyframes } from '@mui/system'
-import type React from 'react'
-import { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 export interface IModuleProps extends BoxProps {
   Icon: React.ReactNode
   Content?: React.ReactNode
   MaxContent?: React.ReactNode
+  insertHTML?: {
+    upload: boolean
+    Content: React.ReactNode
+  }
   variant: 'horizontal' | 'vertical' | 'active'
   onClick?: () => void
 }
@@ -20,11 +23,33 @@ export const Module: React.FC<IModuleProps> = ({
   Icon,
   Content = Icon,
   MaxContent,
+  insertHTML,
   variant = 'full',
   onClick,
   ...props
 }) => {
   const [isHovering, setIsHovering] = useState(false)
+  const insertedHTMLRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (!insertHTML?.upload) return
+
+    const htmlContainerEl = document
+      .getElementById('muve-shadow')
+      .shadowRoot.getElementById('plasmo-shadow-container')
+
+    const insertedHTMLEl = htmlContainerEl.querySelector(
+      '* > #muveInsertedHTML',
+    )
+    insertedHTMLEl?.remove()
+
+    if (variant !== 'active') return
+
+    htmlContainerEl.insertAdjacentHTML(
+      'afterbegin',
+      insertedHTMLRef.current.outerHTML,
+    )
+  }, [insertHTML, variant])
 
   return (
     <Box
@@ -100,6 +125,14 @@ export const Module: React.FC<IModuleProps> = ({
             {MaxContent}
           </Box>
         </Zoom>
+      )}
+
+      {insertHTML && (
+        <Box display="none">
+          <Box ref={insertedHTMLRef} id="muveInsertedHTML">
+            {insertHTML.Content}
+          </Box>
+        </Box>
       )}
     </Box>
   )
