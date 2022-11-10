@@ -1,14 +1,29 @@
 import { Box, BoxProps, Zoom } from '@mui/material'
 import { keyframes } from '@mui/system'
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+
+import { MouseControlContext } from '~context'
+
+type ElementId = string
+type StylePropName = string
+interface IImperativeProps
+  extends Record<ElementId, Record<StylePropName, any>> {}
 
 export interface IModuleProps extends BoxProps {
+  moduleId: number
   Icon: React.ReactNode
   Content?: React.ReactNode
   MaxContent?: React.ReactNode
   insertHTML?: {
-    upload: boolean
-    Content: React.ReactNode
+    Component: React.ReactNode
+    isReactive?: boolean
+    imperativeProps?: IImperativeProps
   }
   variant: 'horizontal' | 'vertical' | 'active'
   onClick?: () => void
@@ -20,36 +35,92 @@ const spin = keyframes`
 `
 
 export const Module: React.FC<IModuleProps> = ({
+  moduleId,
   Icon,
   Content = Icon,
   MaxContent,
   insertHTML,
-  variant = 'full',
+  variant,
   onClick,
   ...props
 }) => {
   const [isHovering, setIsHovering] = useState(false)
   const insertedHTMLRef = useRef<HTMLElement>(null)
+  const { activatedModuleId } = useContext(MouseControlContext)
+  const { shadowRoot } = document.getElementById('muve-shadow')
+  const htmlContainerEl = shadowRoot.getElementById('plasmo-shadow-container')
 
-  useEffect(() => {
-    if (!insertHTML?.upload) return
+  const handleActivatedModule = useCallback(() => {
+    if (!insertHTML) return
 
-    const htmlContainerEl = document
-      .getElementById('muve-shadow')
-      .shadowRoot.getElementById('plasmo-shadow-container')
+    const insertedHTMLEl = shadowRoot.querySelector(
+      '#plasmo-shadow-container > #muveInsertedHTML',
+    )
 
-    const insertedHTMLEl = htmlContainerEl.querySelector(
-      '* > #muveInsertedHTML',
+    if (!insertedHTMLEl) {
+      htmlContainerEl.insertAdjacentHTML(
+        'afterbegin',
+        insertedHTMLRef.current.outerHTML,
+      )
+      return
+    }
+  }, [moduleId === activatedModuleId])
+
+  const handleDisabledModule = useCallback(() => {
+    if (!insertHTML) return
+
+    const insertedHTMLEl = shadowRoot.querySelector(
+      '#plasmo-shadow-container > #muveInsertedHTML',
     )
     insertedHTMLEl?.remove()
+  }, [moduleId === activatedModuleId])
 
-    if (variant !== 'active') return
+  const handleUploadInsertHTML = useCallback(() => {
+    if (insertHTML?.isReactive) {
+      const insertedHTMLEl = shadowRoot.querySelector(
+        '#plasmo-shadow-container > #muveInsertedHTML',
+      )
+      insertedHTMLEl.remove()
 
-    htmlContainerEl.insertAdjacentHTML(
-      'afterbegin',
-      insertedHTMLRef.current.outerHTML,
-    )
-  }, [insertHTML, variant])
+      htmlContainerEl.insertAdjacentHTML(
+        'afterbegin',
+        insertedHTMLRef.current.outerHTML,
+      )
+    }
+
+    if (insertHTML?.imperativeProps) {
+      const insertedHTMLEl = shadowRoot.querySelector(
+        '#plasmo-shadow-container > #muveInsertedHTML',
+      )
+
+      Object.entries(insertHTML.imperativeProps).forEach(
+        ([selector, props]) => {
+          const element = insertedHTMLEl.querySelector(selector) as HTMLElement
+
+          Object.entries(props).forEach(([prop, value], index) => {
+            setTimeout(() => {
+              if (typeof value === 'object') {
+                return Object.assign(element[prop], value)
+              }
+              element[prop] = value
+            }, index + 100)
+          })
+        },
+      )
+    }
+  }, [insertHTML])
+
+  useEffect(() => {
+    if (moduleId !== activatedModuleId) return
+
+    handleActivatedModule()
+
+    return handleDisabledModule
+  }, [activatedModuleId])
+
+  useEffect(() => {
+    moduleId === activatedModuleId && handleUploadInsertHTML()
+  }, [insertHTML])
 
   return (
     <Box
@@ -69,7 +140,7 @@ export const Module: React.FC<IModuleProps> = ({
           alignItems="center"
           borderRadius="30px"
           bgcolor="secondary.500"
-          border="3px solid"
+          border="2px solid"
           borderColor="primary.500"
           sx={{ animation: `${spin} 1s ease` }}
           tracking-event="true"
@@ -90,15 +161,23 @@ export const Module: React.FC<IModuleProps> = ({
             justifyContent="center"
             alignItems="center"
             borderRadius="10%"
+            overflow="hidden"
             bgcolor="secondary.500"
-            border="3px solid"
+            border="2px solid"
             borderColor="primary.500"
             tracking-event="true"
             onMouseEnter={() => setIsHovering(true)}>
             <Zoom
               in={!isHovering || !MaxContent}
               style={{ transitionDuration: '0.5s', transitionDelay: '1s' }}>
-              <Box>{Content}</Box>
+              <Box
+                height="100%"
+                width="100%"
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                {Content}
+              </Box>
             </Zoom>
           </Box>
         </Zoom>
@@ -117,7 +196,7 @@ export const Module: React.FC<IModuleProps> = ({
             justifyContent="center"
             alignItems="center"
             borderRadius="10%"
-            border="3px solid"
+            border="2px solid"
             borderColor="primary.500"
             bgcolor="secondary.900"
             tracking-event="true"
@@ -130,7 +209,7 @@ export const Module: React.FC<IModuleProps> = ({
       {insertHTML && (
         <Box display="none">
           <Box ref={insertedHTMLRef} id="muveInsertedHTML">
-            {insertHTML.Content}
+            {insertHTML.Component}
           </Box>
         </Box>
       )}

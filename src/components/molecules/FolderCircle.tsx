@@ -23,9 +23,13 @@ export const FolderCircle: React.FC<IFolderCircleProps> = ({
     <Box
       width="100%"
       height="100%"
+      borderRadius="50%"
       display="flex"
       justifyContent="center"
       alignItems="center"
+      tracking-event="true"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
       {...props}>
       <Zoom
         in={!isHovering}
@@ -38,11 +42,9 @@ export const FolderCircle: React.FC<IFolderCircleProps> = ({
           justifyContent="center"
           alignItems="center"
           borderRadius="50%"
-          border="3px solid"
+          border="2px solid"
           borderColor="primary.500"
-          bgcolor="secondary.500"
-          tracking-event="true"
-          onMouseEnter={() => setIsHovering(true)}>
+          bgcolor="secondary.500">
           <Zoom
             in={!isHovering}
             style={{ transitionDuration: '0.5s', transitionDelay: '1s' }}>
@@ -58,14 +60,12 @@ export const FolderCircle: React.FC<IFolderCircleProps> = ({
           width="90%"
           height="90%"
           borderRadius="50%"
-          border="3px solid"
+          border="2px solid"
           borderColor="primary.500"
           bgcolor="secondary.500"
           position="absolute"
           overflow="hidden"
-          tracking-event="true"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}>
+          tracking-event="true">
           <Box
             width="75%"
             height="75%"

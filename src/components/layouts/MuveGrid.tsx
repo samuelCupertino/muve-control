@@ -1,28 +1,33 @@
 import { Grid, GridProps } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 
-import { MouseControlContext, TrackingCursorContext } from '~context'
+import {
+  IModuleItem,
+  MouseControlContext,
+  TrackingCursorContext,
+} from '~context'
 
 interface IMuveGridProps extends GridProps {
   Menu: React.ElementType
-  ActiveModule: React.ElementType
-  RecentModules: React.ElementType[]
+  modules: IModuleItem[]
+  activeModuleById: (id: number) => void
 }
 
 export const MuveGrid: React.FC<IMuveGridProps> = ({
   Menu,
-  ActiveModule,
-  RecentModules,
+  modules,
+  activeModuleById,
   ...props
 }) => {
-  const { activeModule } = useContext(MouseControlContext)
+  const gridModules = modules.slice(0, 5)
+  const { isUnderControl } = useContext(TrackingCursorContext)
   const [isHovering, setIsHovering] = useState(true)
-  const [isHoveringId, setIsHoveringId] = useState<NodeJS.Timeout>(null)
+  const [isHoveringTimeId, setIsHoveringTimeId] = useState(null)
 
-  const activeArea = 'b2'
-  const recentAreas = ['a2', 'b3', 'c2', 'b1']
   const menuAreas = ['a1', 'a3', 'c1', 'c3']
+  const moduleAres = ['b2', 'a2', 'b3', 'c2', 'b1']
   const recentAreaToVariant = {
+    b2: 'active',
     a2: 'horizontal',
     b3: 'vertical',
     c2: 'horizontal',
@@ -30,16 +35,19 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
   }
 
   const handleMouseEnter = () => {
-    // clearTimeout(isHoveringId)
-    // setIsHovering(true)
-    // console.log('handleMouseEnter')
+    clearTimeout(isHoveringTimeId)
+    setIsHovering(true)
   }
 
   const handleMouseLeave = () => {
-    // const timeId = setTimeout(() => setIsHovering(false), 30000)
-    // setIsHoveringId(timeId)
-    // console.log('handleMouseLeave')
+    const timeId = setTimeout(
+      () => !isUnderControl && setIsHovering(false),
+      3000,
+    )
+    setIsHoveringTimeId(timeId)
   }
+
+  useEffect(() => setIsHovering(isUnderControl), [isUnderControl])
 
   return (
     <Grid
@@ -59,7 +67,6 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
       borderColor={isHovering ? 'transparent' : 'secondary.500'}
       borderRadius={isHovering ? 0 : 15}
       sx={{ transform: `scale(${isHovering ? 1 : 0.25})`, transition: '1s' }}
-      tracking-event="true"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}>
@@ -78,21 +85,18 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
         </Grid>
       ))}
 
-      {RecentModules.map((Module, index) => {
-        const area = recentAreas[index]
+      {gridModules.map(({ id, component: Module }, index) => {
+        const area = moduleAres[index]
         return (
           <Grid item key={area} gridArea={area} position="relative">
             <Module
+              moduleId={id}
               variant={recentAreaToVariant[area]}
-              onClick={() => activeModule(Module)}
+              onClick={() => activeModuleById(id)}
             />
           </Grid>
         )
       })}
-
-      <Grid item gridArea={activeArea} position="relative">
-        <ActiveModule variant="active" />
-      </Grid>
     </Grid>
   )
 }

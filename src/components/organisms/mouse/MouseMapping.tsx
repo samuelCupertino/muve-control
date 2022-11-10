@@ -56,8 +56,8 @@ export const MouseMapping: React.FC<IModuleProps> = (props) => {
     <Module
       Icon={<Icon src={require(`~assets/icons/mapping.svg`)} size={22} />}
       insertHTML={{
-        upload: updateInsertedHTML,
-        Content: (
+        isReactive: updateInsertedHTML,
+        Component: (
           <CoordinateMap
             coords={[coords.x, coords.y]}
             activeCoord={[activeCoord.x, activeCoord.y]}
@@ -70,18 +70,18 @@ export const MouseMapping: React.FC<IModuleProps> = (props) => {
 }
 
 const clickByCoordinate = (coordX: number, coordY: number) => {
-  const trackingCursorEl = document.getElementById('muve-shadow')
+  const muveShadowEl = document.getElementById('muve-shadow')
 
-  const x = trackingCursorEl.shadowRoot.getElementById(
+  const x = muveShadowEl.shadowRoot.getElementById(
     `muveCoordinateX${coordX}`,
   ).clientWidth
-  const y = trackingCursorEl.shadowRoot.getElementById(
+  const y = muveShadowEl.shadowRoot.getElementById(
     `muveCoordinateY${coordY}`,
   ).clientHeight
 
-  trackingCursorEl.style.display = 'none'
+  muveShadowEl.style.display = 'none'
   const hoveredEl = document.elementFromPoint(x, y) as HTMLElement
-  trackingCursorEl.style.display = 'block'
+  muveShadowEl.style.display = 'block'
 
   hoveredEl.click()
 }

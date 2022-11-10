@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useState } from 'react'
 
 import {
   MouseClick,
@@ -8,16 +9,15 @@ import {
   MouseTracking,
 } from '~components/organisms'
 
-interface IMouseControl {
-  module: {
-    active: React.ElementType
-    recent: React.ElementType[]
-  }
+export interface IModuleItem {
+  id: number
+  component: React.ElementType
 }
 
 interface IMouseControlContext {
-  mouseControl: IMouseControl
-  activeModule: (module: React.ElementType) => void
+  modules: IModuleItem[]
+  activatedModuleId: number
+  activeModuleById: (id: number) => void
   rotateRecentModules: () => void
 }
 
@@ -27,41 +27,36 @@ export const MouseControlContext =
 export const MouseControlProvider: React.FC<{
   children?: React.ReactNode
 }> = ({ children }) => {
-  const [mouseControl, setMouseControl] = React.useState<IMouseControl>({
-    module: {
-      active: MouseClick,
-      recent: [MouseTouchpad, MouseJoystick, MouseMapping, MouseTracking],
-    },
-  })
+  const [modules, setModules] = useState<IModuleItem[]>([
+    { id: 1, component: MouseTracking },
+    { id: 2, component: MouseTouchpad },
+    { id: 3, component: MouseJoystick },
+    { id: 4, component: MouseClick },
+    { id: 5, component: MouseMapping },
+  ])
+  const activatedModuleId = modules[0].id
 
-  const activeModule = (module: React.ElementType) => {
-    const filteredRecent = mouseControl.module.recent.filter(
-      (recent) => recent !== module,
-    )
-    const recent = [mouseControl.module.active, ...filteredRecent]
+  const activeModuleById = (id: number) => {
+    const activatedModule = modules.find((module) => module.id === id)
+    const recentModules = modules.filter((module) => module.id !== id)
 
-    setMouseControl((prev) => ({
-      ...prev,
-      module: { active: module, recent },
-    }))
+    setModules([activatedModule, ...recentModules])
   }
 
   const rotateRecentModules = () => {
-    const lastModules = mouseControl.module.recent.at(-1)
-    const restModules = mouseControl.module.recent.slice(0, -1)
-    const recent = [lastModules, ...restModules]
+    const [active, ...recent] = modules
+    const firstRecent = recent[3]
+    const restRecent = recent.filter((_, index) => index !== 3)
 
-    setMouseControl((prev) => ({
-      ...prev,
-      module: { ...prev.module, recent },
-    }))
+    setModules([active, firstRecent, ...restRecent])
   }
 
   return (
     <MouseControlContext.Provider
       value={{
-        mouseControl,
-        activeModule,
+        modules,
+        activatedModuleId,
+        activeModuleById,
         rotateRecentModules,
       }}>
       {children}

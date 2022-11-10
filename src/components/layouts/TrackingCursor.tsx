@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import * as ml5 from 'ml5'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Webcam from 'react-webcam'
@@ -13,14 +13,13 @@ export const TrackingCursor: React.FC = () => {
   const [screenSize, setScreenSize] = useState({ x: 0, y: 0 })
   const { position, setPosition, trackingClock, handleTrackingEvent } =
     useContext(TrackingCursorContext)
+  const { shadowRoot } = document.getElementById('muve-shadow')
 
   useEffect(() => {
     setScreenSize({ x: window.innerWidth, y: window.innerHeight })
   }, [])
 
   useEffect(() => {
-    const { shadowRoot } = document.getElementById('muve-shadow')
-
     const detect = async () => {
       if (!webcamRef.current?.video) return
 
@@ -28,7 +27,10 @@ export const TrackingCursor: React.FC = () => {
       const x = screenSize.x - result.pose.nose.x
       const y = result.pose.nose.y
 
-      setPosition({ x, y })
+      setPosition({
+        x: x < 0 ? 0 : x,
+        y: y < 0 ? 0 : y,
+      })
 
       containerRef.current.style.display = 'none'
       const hoveredEl = shadowRoot.elementFromPoint(x, y) as HTMLElement
@@ -49,7 +51,7 @@ export const TrackingCursor: React.FC = () => {
   }, [position])
 
   return (
-    <Box ref={containerRef}>
+    <Box ref={containerRef} id="muveTrackingCursor">
       <Webcam
         ref={webcamRef}
         width={screenSize.x}
@@ -67,11 +69,13 @@ export const TrackingCursor: React.FC = () => {
         bgcolor="red"
         borderRadius="50%"
         position="fixed"
-        left={position.x ? `${position.x}px` : 'calc(50% + 13px)'}
-        top={position.y ? `${position.y}px` : 'calc(50% + 150px)'}
+        left={position.x > 0 ? `${position.x}px` : '-100%'}
+        top={position.x > 0 ? `${position.y}px` : '-100%'}
         zIndex={1}
-        sx={{ transform: 'translate(-50%, -100%)', transition: '0.5s' }}>
-        {trackingClock}
+        sx={{ transform: 'translate(-50%, -50%)', transition: '0.5s' }}>
+        <Typography color="white" fontSize={16} fontWeight="bold">
+          {trackingClock}
+        </Typography>
       </Box>
     </Box>
   )
