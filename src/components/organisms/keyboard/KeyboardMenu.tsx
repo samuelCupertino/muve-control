@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 
 import { FolderCircle } from '~components/molecules'
-import { MouseControlContext, MuveConfigContext } from '~context'
+import { KeyboardControlContext, MuveConfigContext } from '~context'
 
-export const MouseMenu: React.FC = () => {
-  const { rotateRecentModules } = useContext(MouseControlContext)
+export const KeyboardMenu: React.FC = () => {
+  const { rotateRecentModules } = useContext(KeyboardControlContext)
   const { activeScreenById } = useContext(MuveConfigContext)
 
   return (
@@ -18,8 +18,8 @@ export const MouseMenu: React.FC = () => {
           onClick: rotateRecentModules,
         },
         {
-          iconSrc: require(`~assets/icons/mouse/keyboard.svg`),
-          onClick: () => activeScreenById(1),
+          iconSrc: require(`~assets/icons/keyboard/settings.svg`),
+          onClick: () => activeScreenById(2),
         },
       ]}
     />

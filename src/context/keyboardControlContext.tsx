@@ -2,34 +2,34 @@ import * as React from 'react'
 import { useState } from 'react'
 
 import {
-  MouseClick,
-  MouseJoystick,
-  MouseMapping,
-  MouseTouchpad,
-  MouseTracking,
+  KeyboardAlphabetic,
+  KeyboardEmoji,
+  KeyboardFunctional,
+  KeyboardMicrophone,
+  KeyboardNumber,
 } from '~components/organisms'
 
 import type { IModuleItem } from './types'
 
-interface IMouseControlContext {
+interface IKeyboardControlContext {
   modules: IModuleItem[]
   activatedModuleId: number
   activeModuleById: (id: number) => void
   rotateRecentModules: () => void
 }
 
-export const MouseControlContext =
-  React.createContext<IMouseControlContext | null>(null)
+export const KeyboardControlContext =
+  React.createContext<IKeyboardControlContext | null>(null)
 
-export const MouseControlProvider: React.FC<{
+export const KeyboardControlProvider: React.FC<{
   children?: React.ReactNode
 }> = ({ children }) => {
   const [modules, setModules] = useState<IModuleItem[]>([
-    { id: 1, component: MouseTracking },
-    { id: 2, component: MouseTouchpad },
-    { id: 3, component: MouseJoystick },
-    { id: 4, component: MouseClick },
-    { id: 5, component: MouseMapping },
+    { id: 1, component: KeyboardMicrophone },
+    { id: 2, component: KeyboardAlphabetic },
+    { id: 3, component: KeyboardEmoji },
+    { id: 4, component: KeyboardFunctional },
+    { id: 5, component: KeyboardNumber },
   ])
   const activatedModuleId = modules[0].id
 
@@ -49,7 +49,7 @@ export const MouseControlProvider: React.FC<{
   }
 
   return (
-    <MouseControlContext.Provider
+    <KeyboardControlContext.Provider
       value={{
         modules,
         activatedModuleId,
@@ -57,6 +57,6 @@ export const MouseControlProvider: React.FC<{
         rotateRecentModules,
       }}>
       {children}
-    </MouseControlContext.Provider>
+    </KeyboardControlContext.Provider>
   )
 }

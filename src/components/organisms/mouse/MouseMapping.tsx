@@ -54,7 +54,7 @@ export const MouseMapping: React.FC<IModuleProps> = (props) => {
 
   return (
     <Module
-      Icon={<Icon src={require(`~assets/icons/mapping.svg`)} size={22} />}
+      Icon={<Icon src={require(`~assets/icons/mouse/mapping.svg`)} size={22} />}
       insertHTML={{
         isReactive: updateInsertedHTML,
         Component: (

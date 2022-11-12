@@ -1,14 +1,6 @@
 import { Box, BoxProps, Zoom } from '@mui/material'
 import { keyframes } from '@mui/system'
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-
-import { MouseControlContext } from '~context'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 type ElementId = string
 type StylePropName = string
@@ -17,6 +9,7 @@ interface IImperativeProps
 
 export interface IModuleProps extends BoxProps {
   moduleId: number
+  activatedModuleId: number
   Icon: React.ReactNode
   Content?: React.ReactNode
   MaxContent?: React.ReactNode
@@ -36,6 +29,7 @@ const spin = keyframes`
 
 export const Module: React.FC<IModuleProps> = ({
   moduleId,
+  activatedModuleId,
   Icon,
   Content = Icon,
   MaxContent,
@@ -46,7 +40,6 @@ export const Module: React.FC<IModuleProps> = ({
 }) => {
   const [isHovering, setIsHovering] = useState(false)
   const insertedHTMLRef = useRef<HTMLElement>(null)
-  const { activatedModuleId } = useContext(MouseControlContext)
   const { shadowRoot } = document.getElementById('muve-shadow')
   const htmlContainerEl = shadowRoot.getElementById('plasmo-shadow-container')
 

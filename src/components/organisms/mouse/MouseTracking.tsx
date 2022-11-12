@@ -44,7 +44,9 @@ export const MouseTracking: React.FC<IModuleProps> = (props) => {
 
   return (
     <Module
-      Icon={<Icon src={require(`~assets/icons/tracking.svg`)} size={38} />}
+      Icon={
+        <Icon src={require(`~assets/icons/mouse/tracking.svg`)} size={38} />
+      }
       Content={
         <Stack height="100%" width="100%">
           <Box flex={1}>
@@ -68,7 +70,7 @@ export const MouseTracking: React.FC<IModuleProps> = (props) => {
               tracking-event="true"
               onClick={() => setTime(Math.min(time + 1, 60))}>
               <Icon
-                src={require(`~assets/icons/plus.svg`)}
+                src={require(`~assets/icons/mouse/plus.svg`)}
                 size={26}
                 py={1}
                 px={2}
@@ -78,7 +80,7 @@ export const MouseTracking: React.FC<IModuleProps> = (props) => {
               tracking-event="true"
               onClick={() => setTime(Math.max(time - 1, 3))}>
               <Icon
-                src={require(`~assets/icons/less.svg`)}
+                src={require(`~assets/icons/mouse/less.svg`)}
                 size={26}
                 py={1}
                 px={2}

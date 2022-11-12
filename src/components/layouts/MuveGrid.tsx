@@ -10,12 +10,14 @@ import {
 interface IMuveGridProps extends GridProps {
   Menu: React.ElementType
   modules: IModuleItem[]
+  activatedModuleId: number
   activeModuleById: (id: number) => void
 }
 
 export const MuveGrid: React.FC<IMuveGridProps> = ({
   Menu,
   modules,
+  activatedModuleId,
   activeModuleById,
   ...props
 }) => {
@@ -91,6 +93,7 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
           <Grid item key={area} gridArea={area} position="relative">
             <Module
               moduleId={id}
+              activatedModuleId={activatedModuleId}
               variant={recentAreaToVariant[area]}
               onClick={() => activeModuleById(id)}
             />

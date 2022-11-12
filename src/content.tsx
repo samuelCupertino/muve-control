@@ -6,8 +6,13 @@ import type { PlasmoGetShadowHostId } from 'plasmo'
 import { useStorage } from '@plasmohq/storage/hook'
 
 import { TrackingCursor } from '~components/layouts'
-import { MouseControl } from '~components/templates'
-import { MouseControlProvider, TrackingCursorProvider } from '~context'
+import { KeyboardControl, MouseControl } from '~components/templates'
+import {
+  KeyboardControlProvider,
+  MouseControlProvider,
+  MuveControlProvider,
+  TrackingCursorProvider,
+} from '~context'
 import { theme } from '~theme'
 
 const styleElement = document.createElement('style')
@@ -23,18 +28,32 @@ export const getStyle = () => styleElement
 export const getShadowHostId: PlasmoGetShadowHostId = () => 'muve-shadow'
 
 const IndexContent: React.FC = () => {
-  const [isMuveActive] = useStorage<boolean>('isMuveActive')
-  const [isMuveTracking] = useStorage<boolean>('isMuveTracking')
+  const [isMuveActive] = useStorage<boolean>('muve.isMuveActive')
+  const [isMuveTracking] = useStorage<boolean>('muve.isMuveTracking')
+  const [activatedScreenId] = useStorage<number>('muve.activatedScreenId', 0)
+
+  if (!isMuveActive) return
 
   return (
     <CacheProvider value={styleCache}>
       <ThemeProvider theme={theme}>
-        <TrackingCursorProvider>
-          <MouseControlProvider>
+        <MuveControlProvider>
+          <TrackingCursorProvider>
             {isMuveTracking && <TrackingCursor />}
-            {isMuveActive && <MouseControl />}
-          </MouseControlProvider>
-        </TrackingCursorProvider>
+
+            {activatedScreenId === 0 && (
+              <MouseControlProvider>
+                <MouseControl />
+              </MouseControlProvider>
+            )}
+
+            {activatedScreenId === 1 && (
+              <KeyboardControlProvider>
+                <KeyboardControl />
+              </KeyboardControlProvider>
+            )}
+          </TrackingCursorProvider>
+        </MuveControlProvider>
       </ThemeProvider>
     </CacheProvider>
   )
