@@ -31,7 +31,7 @@ export const Module: React.FC<IModuleProps> = ({
   moduleId,
   activatedModuleId,
   Icon,
-  Content = Icon,
+  Content,
   MaxContent,
   insertHTML,
   variant,
@@ -169,7 +169,7 @@ export const Module: React.FC<IModuleProps> = ({
                 display="flex"
                 justifyContent="center"
                 alignItems="center">
-                {Content}
+                {Content ? Content : <Box sx={{ zoom: 2 }}>{Icon}</Box>}
               </Box>
             </Zoom>
           </Box>

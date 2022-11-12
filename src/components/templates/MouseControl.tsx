@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { MuveGrid } from '~components/layouts'
+import { MuveGrid } from '~components/core'
 import { MouseMenu } from '~components/organisms'
 import { MouseControlContext } from '~context/mouseControlContext'
 

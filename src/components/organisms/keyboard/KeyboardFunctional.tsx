@@ -1,5 +1,5 @@
 import { Icon } from '~components/atoms'
-import { IModuleProps, Module } from '~components/layouts'
+import { IModuleProps, Module } from '~components/core'
 
 export const KeyboardFunctional: React.FC<IModuleProps> = (props) => (
   <Module

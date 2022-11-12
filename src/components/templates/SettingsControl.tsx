@@ -1,17 +1,17 @@
 import { useContext } from 'react'
 
 import { MuveGrid } from '~components/core'
-import { KeyboardMenu } from '~components/organisms'
-import { KeyboardControlContext } from '~context/keyboardControlContext'
+import { SettingsMenu } from '~components/organisms'
+import { SettingsControlContext } from '~context/settingsControlContext'
 
-export const KeyboardControl: React.FC = () => {
+export const SettingsControl: React.FC = () => {
   const { modules, activatedModuleId, activeModuleById } = useContext(
-    KeyboardControlContext,
+    SettingsControlContext,
   )
 
   return (
     <MuveGrid
-      Menu={KeyboardMenu}
+      Menu={SettingsMenu}
       modules={modules}
       activatedModuleId={activatedModuleId}
       activeModuleById={activeModuleById}

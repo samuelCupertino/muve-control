@@ -5,12 +5,17 @@ import type { PlasmoGetShadowHostId } from 'plasmo'
 
 import { useStorage } from '@plasmohq/storage/hook'
 
-import { TrackingCursor } from '~components/layouts'
-import { KeyboardControl, MouseControl } from '~components/templates'
+import { TrackingCursor } from '~components/core'
+import {
+  KeyboardControl,
+  MouseControl,
+  SettingsControl,
+} from '~components/templates'
 import {
   KeyboardControlProvider,
   MouseControlProvider,
   MuveControlProvider,
+  SettingsControlProvider,
   TrackingCursorProvider,
 } from '~context'
 import { theme } from '~theme'
@@ -51,6 +56,12 @@ const IndexContent: React.FC = () => {
               <KeyboardControlProvider>
                 <KeyboardControl />
               </KeyboardControlProvider>
+            )}
+
+            {activatedScreenId === 2 && (
+              <SettingsControlProvider>
+                <SettingsControl />
+              </SettingsControlProvider>
             )}
           </TrackingCursorProvider>
         </MuveControlProvider>

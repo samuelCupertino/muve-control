@@ -2,7 +2,7 @@ import { Box, Button, Divider, Stack } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 
 import { Icon } from '~components/atoms'
-import { IModuleProps, Module } from '~components/layouts'
+import { IModuleProps, Module } from '~components/core'
 import { TimeCursor } from '~components/molecules'
 import { TrackingCursorContext } from '~context'
 

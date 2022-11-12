@@ -1,11 +1,7 @@
 import { Grid, GridProps } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 
-import {
-  IModuleItem,
-  MouseControlContext,
-  TrackingCursorContext,
-} from '~context'
+import { IModuleItem, TrackingCursorContext } from '~context'
 
 interface IMuveGridProps extends GridProps {
   Menu: React.ElementType
@@ -62,8 +58,8 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
       position="fixed"
       width="auto"
       height="auto"
-      left="calc(50% - (150px * 3 / 2))"
-      top="calc(50% - (150px * 3 / 2))"
+      left="calc(50% - (155px * 3 / 2))"
+      top="calc(50% - (155px * 3 / 2))"
       bgcolor={isHovering ? 'transparent' : 'primary.500'}
       border={isHovering ? '0px' : '5px solid'}
       borderColor={isHovering ? 'transparent' : 'secondary.500'}

@@ -5,7 +5,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition'
 
 import { Icon } from '~components/atoms'
-import { IModuleProps, Module } from '~components/layouts'
+import { IModuleProps, Module } from '~components/core'
 import { CoordinateMap } from '~components/molecules'
 
 interface ICoordinate {
