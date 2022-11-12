@@ -2,8 +2,8 @@ import { Box, BoxProps, Typography } from '@mui/material'
 import { keyframes } from '@mui/system'
 
 interface ICoordinateMapProps extends BoxProps {
-  coords: [number, number]
-  activeCoord: [number, number]
+  coords: { x: number; y: number }
+  activeCoord: { x: number; y: number }
 }
 
 interface ICoordinateContainer extends BoxProps {
@@ -25,34 +25,34 @@ const loadingCoord = keyframes`
 `
 
 export const CoordinateMap: React.FC<ICoordinateMapProps> = ({
-  coords: [coordsX, coordsY],
-  activeCoord: [activeCoordX, activeCoordY],
+  coords,
+  activeCoord,
   ...props
 }) => (
   <Box width="100vw" height="100vh" position="fixed" {...props}>
     <CoordinateContainer variant="x">
-      {Array.from({ length: coordsX }, (_, index) => (
+      {Array.from({ length: coords.x }, (_, index) => (
         <Coordinate
           key={index}
           variant="x"
           isFirst={index === 0}
-          isLast={index === coordsX - 1}
-          isActive={index === activeCoordX}
-          size={100 * (activeCoordY / (coordsY - 1))}
+          isLast={index === coords.x - 1}
+          isActive={index === activeCoord.x}
+          size={100 * (activeCoord.y / (coords.y - 1))}
           index={index}
         />
       ))}
     </CoordinateContainer>
 
     <CoordinateContainer variant="y">
-      {Array.from({ length: coordsY }, (_, index) => (
+      {Array.from({ length: coords.y }, (_, index) => (
         <Coordinate
           key={index}
           variant="y"
           isFirst={index === 0}
-          isLast={index === coordsY - 1}
-          isActive={index === activeCoordY}
-          size={100 * (activeCoordX / (coordsX - 1))}
+          isLast={index === coords.y - 1}
+          isActive={index === activeCoord.y}
+          size={100 * (activeCoord.x / (coords.x - 1))}
           index={index}
         />
       ))}

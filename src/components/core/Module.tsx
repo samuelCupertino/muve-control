@@ -169,7 +169,13 @@ export const Module: React.FC<IModuleProps> = ({
                 display="flex"
                 justifyContent="center"
                 alignItems="center">
-                {Content ? Content : <Box sx={{ zoom: 2 }}>{Icon}</Box>}
+                {Content ? (
+                  Content
+                ) : (
+                  <Box display="flex" sx={{ zoom: 2 }}>
+                    {Icon}
+                  </Box>
+                )}
               </Box>
             </Zoom>
           </Box>

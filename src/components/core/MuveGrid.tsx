@@ -65,6 +65,7 @@ export const MuveGrid: React.FC<IMuveGridProps> = ({
       borderColor={isHovering ? 'transparent' : 'secondary.500'}
       borderRadius={isHovering ? 0 : 15}
       sx={{ transform: `scale(${isHovering ? 1 : 0.25})`, transition: '1s' }}
+      tracking-event="true"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}>
