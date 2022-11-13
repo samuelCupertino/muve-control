@@ -57,7 +57,7 @@ export const TrackingCursor: React.FC = () => {
         width={screenSize.x}
         height={screenSize.y}
         mirrored={true}
-        style={{ position: 'fixed', opacity: 0.25, objectFit: 'cover' }}
+        style={{ position: 'fixed', opacity: 0.35, objectFit: 'cover' }}
       />
       <Box
         width={25}

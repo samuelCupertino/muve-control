@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 interface IPosition {
   x: number
@@ -10,9 +10,11 @@ interface ITrackingCursorContext {
   hoveredElements: HTMLElement[]
   trackingClock: number
   isUnderControl: boolean
+  clickedEl: HTMLElement
   setPosition: React.Dispatch<React.SetStateAction<IPosition>>
   handleTrackingEvent: (element: HTMLElement) => void
   setTrackingTime: React.Dispatch<React.SetStateAction<number>>
+  clickByCoord: (x: number, y: number) => HTMLElement
 }
 
 export const TrackingCursorContext =
@@ -26,44 +28,71 @@ export const TrackingCursorProvider: React.FC<{
   const [trackingTime, setTrackingTime] = useState(3)
   const [trackingClock, setTrackingClock] = useState(trackingTime)
   const [isUnderControl, setIsUnderControl] = useState(false)
+  const [clickedEl, setClickedEl] = useState<HTMLElement>(null)
 
-  const handleTrackingEvent = (element?: HTMLElement) => {
-    const restElements = hoveredElements.slice(0, trackingTime)
-    const newHoveredElements = [element, ...restElements]
-    setHoveredElements(newHoveredElements)
+  const handleTrackingEvent = useCallback(
+    (element?: HTMLElement) => {
+      const restElements = hoveredElements.slice(0, trackingTime)
+      const newHoveredElements = [element, ...restElements]
+      setHoveredElements(newHoveredElements)
 
-    const newIsUnderControl = newHoveredElements.some((el) => el)
-    setIsUnderControl(newIsUnderControl)
+      const newIsUnderControl = newHoveredElements.some((el) => el)
+      setIsUnderControl(newIsUnderControl)
 
-    const [firstElement, secondElement] = newHoveredElements
+      const [firstElement, secondElement] = newHoveredElements
 
-    const isMouseover = firstElement !== secondElement
-    if (isMouseover) {
-      setTrackingClock(trackingTime)
+      const isMouseover = firstElement !== secondElement
+      if (isMouseover) {
+        setTrackingClock(trackingTime)
 
-      const otherElements = newHoveredElements.filter(
-        (el) => el !== firstElement,
-      )
-      otherElements.forEach((el) => {
-        el?.dispatchEvent(new Event('mouseout', { bubbles: true }))
-      })
+        const otherElements = newHoveredElements.filter(
+          (el) => el !== firstElement,
+        )
+        otherElements.forEach((el) => {
+          el?.dispatchEvent(new Event('mouseout', { bubbles: true }))
+        })
 
-      firstElement?.dispatchEvent(new Event('mouseover', { bubbles: true }))
-      return
-    }
+        firstElement?.dispatchEvent(new Event('mouseover', { bubbles: true }))
+        return
+      }
 
-    if (!firstElement) return
+      if (!firstElement) return
 
-    setTrackingClock(trackingClock - 1)
-    const isClick = hoveredElements.every((el) => el === firstElement)
-    if (isClick) {
-      setTrackingClock(trackingTime)
-      firstElement.dispatchEvent(new Event('click', { bubbles: true }))
+      setTrackingClock(trackingClock - 1)
+      const isClick = hoveredElements.every((el) => el === firstElement)
+      if (isClick) {
+        setTrackingClock(trackingTime)
+        firstElement.dispatchEvent(new Event('click', { bubbles: true }))
 
-      const [_, ...resetElements] = hoveredElements.map(() => null)
-      return setHoveredElements([firstElement, ...resetElements])
-    }
-  }
+        const [_, ...resetElements] = hoveredElements.map(() => null)
+        return setHoveredElements([firstElement, ...resetElements])
+      }
+    },
+    [
+      hoveredElements,
+      trackingTime,
+      trackingClock,
+      setHoveredElements,
+      setTrackingTime,
+      setTrackingClock,
+    ],
+  )
+
+  const clickByCoord = useCallback(
+    (x: number, y: number) => {
+      const muveShadowEl = document.getElementById('muve-shadow')
+
+      muveShadowEl.style.display = 'none'
+      const hoveredEl = document.elementFromPoint(x, y) as HTMLElement
+      muveShadowEl.style.display = 'block'
+
+      hoveredEl.click()
+      setClickedEl(hoveredEl)
+
+      return hoveredEl
+    },
+    [setClickedEl],
+  )
 
   return (
     <TrackingCursorContext.Provider
@@ -72,9 +101,11 @@ export const TrackingCursorProvider: React.FC<{
         hoveredElements,
         trackingClock,
         isUnderControl,
+        clickedEl,
         setPosition,
         handleTrackingEvent,
         setTrackingTime,
+        clickByCoord,
       }}>
       {children}
     </TrackingCursorContext.Provider>

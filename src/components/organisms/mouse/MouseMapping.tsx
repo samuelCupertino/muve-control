@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import React from 'react'
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -7,6 +7,7 @@ import SpeechRecognition, {
 import { Icon } from '~components/atoms'
 import { IModuleProps, Module } from '~components/core'
 import { CoordinateMap } from '~components/molecules'
+import { MuveConfigContext, TrackingCursorContext } from '~context'
 import { speak } from '~utils/speak'
 
 interface ICoordinate {
@@ -22,6 +23,9 @@ export const MouseMapping: React.FC<IModuleProps> = ({
   const [coords, setCoords] = useState<ICoordinate>({ x: 10, y: 10 })
   const [activeCoord, setActiveCoord] = useState<ICoordinate>({ x: 0, y: 0 })
   const [IsTransitionCompleted, setIsTransitionCompleted] = useState(true)
+  const { activeScreenById } = useContext(MuveConfigContext)
+  const { clickByCoord } = useContext(TrackingCursorContext)
+  const muveShadowEl = document.getElementById('muve-shadow')
 
   const { finalTranscript } = useSpeechRecognition({
     commands: [
@@ -62,7 +66,7 @@ export const MouseMapping: React.FC<IModuleProps> = ({
           const { x, y } = activeCoord
           if (!(x >= 0) || !(y >= 0)) return
 
-          clickByCoordinate(x, y)
+          clickByCoord(x, y)
           speak(`ok, clicando.`)
         },
       },
@@ -73,7 +77,19 @@ export const MouseMapping: React.FC<IModuleProps> = ({
           if (!(x >= 0) || !(y >= 0)) return
 
           setActiveCoord({ x, y })
-          setTimeout(() => clickByCoordinate(x, y), 1000)
+
+          setTimeout(() => {
+            const x = muveShadowEl.shadowRoot.getElementById(
+              `muveCoordinateX${coordX}`,
+            ).clientWidth
+            const y = muveShadowEl.shadowRoot.getElementById(
+              `muveCoordinateY${coordY}`,
+            ).clientHeight
+
+            const clickedEl = clickByCoord(x, y)
+
+            if (clickedEl.tagName === 'TEXTAREA') activeScreenById(1)
+          }, 1000)
           speak(`ok, clicando.`)
         },
       },
@@ -118,6 +134,7 @@ export const MouseMapping: React.FC<IModuleProps> = ({
   }, [activatedModuleId])
 
   useEffect(() => {
+    console.log(finalTranscript)
     setIsTransitionCompleted(true)
     setTimeout(() => setIsTransitionCompleted(false), 0)
   }, [finalTranscript])
@@ -134,21 +151,4 @@ export const MouseMapping: React.FC<IModuleProps> = ({
       {...props}
     />
   )
-}
-
-const clickByCoordinate = (coordX: number, coordY: number) => {
-  const muveShadowEl = document.getElementById('muve-shadow')
-
-  const x = muveShadowEl.shadowRoot.getElementById(
-    `muveCoordinateX${coordX}`,
-  ).clientWidth
-  const y = muveShadowEl.shadowRoot.getElementById(
-    `muveCoordinateY${coordY}`,
-  ).clientHeight
-
-  muveShadowEl.style.display = 'none'
-  const hoveredEl = document.elementFromPoint(x, y) as HTMLElement
-  muveShadowEl.style.display = 'block'
-
-  hoveredEl.click()
 }

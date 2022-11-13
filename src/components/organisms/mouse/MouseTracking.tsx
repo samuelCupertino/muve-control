@@ -4,13 +4,16 @@ import { useContext, useEffect, useState } from 'react'
 import { Icon } from '~components/atoms'
 import { IModuleProps, Module } from '~components/core'
 import { TimeCursor } from '~components/molecules'
-import { TrackingCursorContext } from '~context'
+import { MuveConfigContext, TrackingCursorContext } from '~context'
 
 export const MouseTracking: React.FC<IModuleProps> = (props) => {
   const [time, setTime] = useState(5)
   const [storeCoord, setStoreCoord] = useState([{ x: 100, y: 100 }])
   const coord = storeCoord[0]
-  const { position, isUnderControl } = useContext(TrackingCursorContext)
+  const { position, isUnderControl, clickByCoord } = useContext(
+    TrackingCursorContext,
+  )
+  const { activeScreenById } = useContext(MuveConfigContext)
   const [countDown, setCountDown] = useState(time)
 
   const muveShadowEl = document.getElementById('muve-shadow')
@@ -35,11 +38,9 @@ export const MouseTracking: React.FC<IModuleProps> = (props) => {
     if (countDown > 0) return
     const { x, y } = timeCursorEl.getBoundingClientRect()
 
-    muveShadowEl.style.display = 'none'
-    const hoveredEl = document.elementFromPoint(x, y) as HTMLElement
-    muveShadowEl.style.display = 'block'
+    const clickedEl = clickByCoord(x, y)
 
-    hoveredEl.click()
+    if (clickedEl.tagName === 'TEXTAREA') activeScreenById(1)
   }, [position, setCountDown])
 
   return (
