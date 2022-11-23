@@ -73,6 +73,6 @@ Links do Projeto:
 - Figma: https://www.figma.com/file/HE1C0vSumIl7RUyIaJ4qDj/Muve
 
 Feedbacks:
-- Rejaine Ventura: xxxxx
+- Rejaine Ventura: https://www.youtube.com/watch?v=Rx8nteBYSgU&ab_channel=dev_verso
 - Anna Karolina: https://www.linkedin.com/feed/update/urn:li:activity:6998312081234001921
 - Daniela Cupertino: https://www.linkedin.com/feed/update/urn:li:activity:7000759006994546688
