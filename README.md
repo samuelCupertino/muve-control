@@ -1,4 +1,31 @@
-## Inicialização do Muve
+## Projeto Muve
+
+<table>
+    <tr>
+        <td>
+           Tela inicial
+        </td>
+        <td>
+           Todas as telas 
+        </td>
+    </tr>
+    <tr>
+        <td>
+           <img width="682" alt="Screenshot 2022-11-23 at 15 19 45" src="https://user-images.githubusercontent.com/88355379/203620270-66df54d1-fde1-4731-85b2-5daea65dc773.png">
+        </td>
+        <td>
+           <img width="903" alt="Screenshot 2022-11-23 at 15 21 32" src="https://user-images.githubusercontent.com/88355379/203620581-cc393446-3c25-4089-ade8-03c7525039ed.png">
+        </td>
+    </tr>
+</table>
+
+<br/> 
+
+---- 
+
+<br/>
+
+## Inicialização
 
 Instalação das dependências: 
 ```bash
@@ -15,6 +42,10 @@ Ambiente de Produção:
 yarn build
 ```
 
+<br/> 
+
+---- 
+
 <br/>
 
 
@@ -27,6 +58,10 @@ yarn build
 - Speech Recognition ([doc](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition))
 - Speech Synthesis ([doc](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis))
 
+
+<br/> 
+
+---- 
 
 <br/>
 
