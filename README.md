@@ -20,19 +20,22 @@
 </table>
 
 
-     
-![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/88355379/205695254-d23bb377-e28b-4521-9269-b6c6422cb94b.gif)
-  
-        
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/88355379/205696069-fb0e1f7e-ca67-46f9-9beb-750c189709f3.gif)
-
-
+<table>
+    <tr>
+        <td>
+            
 ![ezgif com-gif-maker (7)](https://user-images.githubusercontent.com/88355379/205697362-6fd1b1e5-73b2-48fd-a292-616f8a244ddd.gif)
-
-
-
-
-<br/> 
+        </td>
+        <td>
+            
+![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/88355379/205695254-d23bb377-e28b-4521-9269-b6c6422cb94b.gif)
+        </td>
+        <td>
+            
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/88355379/205696069-fb0e1f7e-ca67-46f9-9beb-750c189709f3.gif)
+        </td>
+    </tr>
+</table>
 
 ---- 
 
