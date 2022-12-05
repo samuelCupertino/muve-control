@@ -19,6 +19,9 @@
     </tr>
 </table>
 
+![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/88355379/205695254-d23bb377-e28b-4521-9269-b6c6422cb94b.gif)
+
+
 <br/> 
 
 ---- 
@@ -40,6 +43,7 @@ yarn dev
 Ambiente de Produção:
 ```bash
 yarn build
+yarn start
 ```
 
 <br/> 
